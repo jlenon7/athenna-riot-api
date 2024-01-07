@@ -16,6 +16,7 @@ export default {
         }
       }
     },
+
     store: {
       200: {
         description: 'Return the created summoner profile.',

@@ -1,14 +1,14 @@
 export default {
   host: Env('HOST', '0.0.0.0'),
   port: Env('PORT', 3000),
-  trace: true,
-  domain: Env('APP_DOMAIN', 'http://localhost:1335'),
+  domain: Env('APP_DOMAIN', 'http://localhost:3000'),
   logger: {
+    enabled: Env('LOG_HTTP', true),
     ignoreCodes: ['E_DUPLICATED_SUMMONER_ERROR'],
-    ignoreStatutes: [],
-    enabled: Env('LOG_HTTP', true)
+    ignoreStatutes: []
   },
   cors: {
+    enabled: true,
     origin: ['*'],
     methods: ['*'],
     allowedHeaders: ['*'],
@@ -17,18 +17,21 @@ export default {
     credentials: false
   },
   rTracer: {
+    enabled: true,
     echoHeader: false,
     useHeader: false,
     headerName: 'X-Request-Id',
     useFastifyRequestId: false
   },
   helmet: {
+    enabled: true,
     global: true
   },
   swagger: {
+    enabled: true,
     ui: {
       staticCSP: true,
-      routePrefix: '/documentation'
+      routePrefix: '/docs'
     },
     configurations: {
       mode: 'dynamic',
@@ -49,6 +52,7 @@ export default {
     }
   },
   rateLimit: {
+    enabled: true,
     global: true,
     max: 1000,
     ban: null,

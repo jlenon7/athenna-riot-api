@@ -46,7 +46,7 @@ To run your application in watch mode:
 node artisan serve --watch
 ```
 
-Visit [http://localhost:3000/documentation](http://localhost:3000/documentation)
+Visit [http://localhost:3000/docs](http://localhost:3000/docs)
 to see the Swagger documentation page.
 
 To run application tests (needs Database and API Key for E2E tests):
