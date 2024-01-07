@@ -3,9 +3,10 @@ import { Config } from '@athenna/config'
 import type { SummonerDto } from '#src/dtos/summoner.dto'
 import { HttpClient, HttpClientBuilder } from '@athenna/common'
 import { ApiKeyExpiredException } from '#src/exceptions/apikeyexpired.exception'
+import type { RiotApiServiceInterface } from '#src/interfaces/riotapi.service.interface'
 
 @Service()
-export class RiotApiService {
+export class RiotApiService implements RiotApiServiceInterface {
   public request(region: string): HttpClientBuilder {
     return HttpClient.builder()
       .prefixUrl(Config.get('riot.baseUrl').replace('{{ region }}', region))

@@ -4,7 +4,7 @@ export default {
   domain: Env('APP_DOMAIN', 'http://localhost:3000'),
   logger: {
     enabled: Env('LOG_HTTP', true),
-    ignoreCodes: ['E_DUPLICATED_SUMMONER_ERROR'],
+    ignoreCodes: ['E_DUPLICATED_SUMMONER_ERROR', 'E_NOT_FOUND_DATA_ERROR'],
     ignoreStatutes: []
   },
   cors: {

@@ -136,6 +136,7 @@ build
 
 # Environment variables file
 .env
+.env.test
 .env.production
 
 # MacOS folder mapper file

@@ -24,6 +24,32 @@ export default class SummonerControllerTest extends BaseHttpTest {
   }
 
   @Test()
+  public async shouldBeAbleToGetASummonerByRegionAndItNicknameFromApi({ request }: Context) {
+    await Summoner.factory().create({ nickname: 'iLenon7' })
+
+    const response = await request.get('/api/v1/summoners/br1/iLenon7')
+
+    response.assertStatusCode(200)
+    response.assertBodyContains({
+      region: 'br1',
+      nickname: 'iLenon7'
+    })
+  }
+
+  @Test()
+  public async shouldThrowNotFoundExceptionWhenSummonerDoesNotExist({ request }: Context) {
+    const response = await request.get('/api/v1/summoners/br1/iLenon7')
+
+    response.assertStatusCode(404)
+    response.assertBodyContains({
+      name: 'NotFoundDataException',
+      code: 'E_NOT_FOUND_DATA_ERROR',
+      message: 'Data not found in database.',
+      help: 'Data not found in database using the using postgres connection.'
+    })
+  }
+
+  @Test()
   public async shouldBeAbleToCreateSummoner({ request }: Context) {
     const response = await request.post('/api/v1/summoners', {
       body: {

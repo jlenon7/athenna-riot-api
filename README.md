@@ -40,6 +40,12 @@ Install dependencies:
 npm install
 ```
 
+Create `.env` and `.env.test`
+
+```shell
+cp .env.example .env && cp .env.example .env.test
+```
+
 Run database migrations:
 
 ```shell

@@ -13,6 +13,15 @@ export class SummonerController {
     return response.status(200).send(data)
   }
 
+  public async show({ request, response }: Context) {
+    const data = await this.summonerService.findOne(
+      request.param('region'),
+      request.param('nickname')
+    )
+
+    return response.status(200).send(data)
+  }
+
   public async store({ request, response }: Context) {
     const data = await this.summonerService.createOne(
       request.input('region'),
