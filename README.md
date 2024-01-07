@@ -34,6 +34,12 @@ using the following command:
 docker-compose up -d
 ```
 
+Install dependencies:
+
+```shell
+npm install
+```
+
 Run database migrations:
 
 ```shell
