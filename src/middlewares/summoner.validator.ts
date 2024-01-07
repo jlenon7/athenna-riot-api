@@ -12,7 +12,7 @@ export class SummonerValidator implements MiddlewareContract {
     const exists = await Summoner.query()
       .where('region', region)
       .where('nickname', nickname)
-      .find()
+      .exists()
 
     if (exists) {
       throw new DuplicatedSummonerException(region, nickname)
