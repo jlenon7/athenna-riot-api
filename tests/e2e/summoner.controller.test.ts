@@ -58,7 +58,7 @@ export default class SummonerControllerTest extends BaseHttpTest {
       }
     })
 
-    response.assertStatusCode(200)
+    response.assertStatusCode(201)
     response.assertBodyContains({
       region: 'br1',
       nickname: 'iLenon7'
@@ -83,6 +83,19 @@ export default class SummonerControllerTest extends BaseHttpTest {
       name: 'DuplicatedSummonerException',
       message: 'The summoner iLenon7 with region br1 already exists in database.',
       help: 'A summoner can only exists with the same nickname in different regions.'
+    })
+  }
+
+  @Test()
+  public async shouldBeAbleToUpdateSummoner({ request }: Context) {
+    await Summoner.factory().count(1).create({ region: 'br1', nickname: 'iLenon7' })
+
+    const response = await request.put('/api/v1/summoners/br1/iLenon7')
+
+    response.assertStatusCode(200)
+    response.assertBodyContains({
+      region: 'br1',
+      nickname: 'iLenon7'
     })
   }
 }

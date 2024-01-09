@@ -4,7 +4,8 @@ export default {
   default: Env('DB_CONNECTION', ''),
   connections: {
     fake: {
-      driver: 'fake'
+      driver: 'fake',
+      validations: false
     },
 
     postgres: {

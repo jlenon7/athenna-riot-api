@@ -28,6 +28,15 @@ export class SummonerController {
       request.input('nickname')
     )
 
+    return response.status(201).send(data)
+  }
+
+  public async update({ request, response }: Context) {
+    const data = await this.summonerService.updateOne(
+      request.param('region'),
+      request.param('nickname')
+    )
+
     return response.status(200).send(data)
   }
 }

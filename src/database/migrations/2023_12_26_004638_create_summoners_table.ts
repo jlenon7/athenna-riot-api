@@ -9,6 +9,7 @@ export class Summoners extends BaseMigration {
       builder.string('nickname')
       builder.string('region')
       builder.string('puuid').unique()
+      builder.string('summonerId').unique()
       builder.string('accountId').unique()
       builder.dateTime('deletedAt').defaultTo(null)
       builder.timestamps(true, true, true)

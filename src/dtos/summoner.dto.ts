@@ -1,4 +1,5 @@
 export class SummonerDto {
+  public id: string
   public name: string
   public puuid: string
   public accountId: string

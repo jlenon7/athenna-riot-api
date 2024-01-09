@@ -8,6 +8,9 @@ export class Summoner extends BaseModel {
   public nickname: string
 
   @Column({ isUnique: true, isNullable: false })
+  public summonerId: string
+
+  @Column({ isUnique: true, isNullable: false })
   public accountId: string
 
   @Column({ isUnique: true, isNullable: false })
@@ -29,6 +32,7 @@ export class Summoner extends BaseModel {
     return {
       id: this.faker.number.int({ max: 100000 }),
       nickname: this.faker.person.firstName(),
+      summonerId: this.faker.string.uuid(),
       accountId: this.faker.string.uuid(),
       puuid: this.faker.string.uuid(),
       region: 'br1',

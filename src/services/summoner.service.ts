@@ -22,13 +22,35 @@ export class SummonerService {
   }
 
   public async createOne(region: string, nickname: string) {
-    const data = await this.riotApiService.getSummoner(region, nickname)
+    const data = await this.riotApiService.getSummonerByName(region, nickname)
     const summoner = await Summoner.create({
       region,
       puuid: data.puuid,
+      summonerId: data.id,
       nickname: data.name,
       accountId: data.accountId
     })
+
+    return summoner.toJSON()
+  }
+
+  public async updateOne(region: string, nickname: string) {
+    const summoner = await Summoner.query()
+      .where('region', region)
+      .where('nickname', nickname)
+      .findOrFail()
+
+    const data = await this.riotApiService.getSummonerBySummonerId(
+      summoner.region,
+      summoner.summonerId
+    )
+
+    summoner.puuid = data.puuid
+    summoner.summonerId = data.id
+    summoner.nickname = data.name
+    summoner.accountId = data.accountId
+
+    await summoner.save()
 
     return summoner.toJSON()
   }
