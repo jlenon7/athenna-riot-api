@@ -33,10 +33,19 @@ export class SummonerController {
 
   public async update({ request, response }: Context) {
     const data = await this.summonerService.updateOne(
+      request.input('region'),
+      request.input('nickname')
+    )
+
+    return response.status(200).send(data)
+  }
+
+  public async delete({ request, response }: Context) {
+    await this.summonerService.deleteOne(
       request.param('region'),
       request.param('nickname')
     )
 
-    return response.status(200).send(data)
+    return response.status(204)
   }
 }

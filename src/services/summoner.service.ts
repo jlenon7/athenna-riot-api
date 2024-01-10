@@ -7,9 +7,11 @@ export class SummonerService {
   public constructor(private riotApiService: RiotApiServiceInterface) {}
 
   public async findAll(region: string) {
-    const summoners = await Summoner.query().where('region', region).findMany()
+    const summoners = await Summoner.query()
+      .where('region', region)
+      .collection()
 
-    return summoners.map(summoner => summoner.toJSON())
+    return summoners.toJSON()
   }
 
   public async findOne(region: string, nickname: string) {
@@ -53,5 +55,14 @@ export class SummonerService {
     await summoner.save()
 
     return summoner.toJSON()
+  }
+
+  public async deleteOne(region: string, nickname: string) {
+    const summoner = await Summoner.query()
+      .where('region', region)
+      .where('nickname', nickname)
+      .findOrFail()
+
+    await summoner.delete()
   }
 }

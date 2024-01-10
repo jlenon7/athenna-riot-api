@@ -2,12 +2,9 @@ import { HttpClient } from '@athenna/common'
 import { RiotApiService } from '#src/services/riotapi.service'
 import { Test, type Context, AfterEach, Mock, BeforeEach } from '@athenna/test'
 import { ApiKeyExpiredException } from '#src/exceptions/apikeyexpired.exception'
+import { REGION, NICKNAME, SUMMONER_ID } from '#tests/fixtures/constants/summoner'
 
 export default class RiotApiServiceTest {
-  private readonly REGION = 'br1'
-  private readonly NICKNAME = 'iLenon7'
-  private readonly SUMMONER_ID = 'q7kJ4LOHcfyzVsBLSlgPo1K6_zAIH3HLsMRTpVtxOzLFPZ8'
-
   @BeforeEach()
   public async beforeEach() {
     Config.set('riot.apiKey', '12345')
@@ -24,14 +21,14 @@ export default class RiotApiServiceTest {
     const riotApiService = new RiotApiService()
     const builder = HttpClient.builder()
 
-    Mock.when(builder, 'get').resolve({ body: { region: this.REGION, name: this.NICKNAME } })
+    Mock.when(builder, 'get').resolve({ body: { region: REGION, name: NICKNAME } })
     Mock.when(riotApiService, 'request').return(builder)
 
-    const summoner = await riotApiService.getSummonerByName(this.REGION, this.NICKNAME)
+    const summoner = await riotApiService.getSummonerByName(REGION, NICKNAME)
 
     assert.deepEqual(summoner, {
-      region: this.REGION,
-      name: this.NICKNAME
+      region: REGION,
+      name: NICKNAME
     })
   }
 
@@ -43,7 +40,7 @@ export default class RiotApiServiceTest {
     Mock.when(builder, 'get').resolve({ statusCode: 403 })
     Mock.when(riotApiService, 'request').return(builder)
 
-    await assert.rejects(() => riotApiService.getSummonerByName(this.REGION, this.NICKNAME), ApiKeyExpiredException)
+    await assert.rejects(() => riotApiService.getSummonerByName(REGION, NICKNAME), ApiKeyExpiredException)
   }
 
   @Test()
@@ -51,14 +48,14 @@ export default class RiotApiServiceTest {
     const riotApiService = new RiotApiService()
     const builder = HttpClient.builder()
 
-    Mock.when(builder, 'get').resolve({ body: { region: this.REGION, name: this.NICKNAME } })
+    Mock.when(builder, 'get').resolve({ body: { region: REGION, name: NICKNAME } })
     Mock.when(riotApiService, 'request').return(builder)
 
-    const summoner = await riotApiService.getSummonerBySummonerId(this.REGION, this.SUMMONER_ID)
+    const summoner = await riotApiService.getSummonerBySummonerId(REGION, SUMMONER_ID)
 
     assert.deepEqual(summoner, {
-      region: this.REGION,
-      name: this.NICKNAME
+      region: REGION,
+      name: NICKNAME
     })
   }
 
@@ -70,9 +67,6 @@ export default class RiotApiServiceTest {
     Mock.when(builder, 'get').resolve({ statusCode: 403 })
     Mock.when(riotApiService, 'request').return(builder)
 
-    await assert.rejects(
-      () => riotApiService.getSummonerBySummonerId(this.REGION, this.NICKNAME),
-      ApiKeyExpiredException
-    )
+    await assert.rejects(() => riotApiService.getSummonerBySummonerId(REGION, NICKNAME), ApiKeyExpiredException)
   }
 }

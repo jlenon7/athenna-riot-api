@@ -42,12 +42,12 @@ export default {
           id: { type: 'integer' },
           region: { type: 'string' },
           nickname: { type: 'string' },
-          summonerid: { type: 'string' },
-          accountid: { type: 'string' },
+          summonerId: { type: 'string' },
+          accountId: { type: 'string' },
           puuid: { type: 'string' },
-          createdat: { type: 'string' },
-          updatedat: { type: 'string' },
-          deletedat: { type: 'string' }
+          createdAt: { type: 'string' },
+          updatedAt: { type: 'string' },
+          deletedAt: { type: 'string' }
         }
       }
     },
@@ -59,13 +59,20 @@ export default {
           id: { type: 'integer' },
           region: { type: 'string' },
           nickname: { type: 'string' },
-          summonerid: { type: 'string' },
-          accountid: { type: 'string' },
+          summonerId: { type: 'string' },
+          accountId: { type: 'string' },
           puuid: { type: 'string' },
-          createdat: { type: 'string' },
-          updatedat: { type: 'string' },
-          deletedat: { type: 'string' }
+          createdAt: { type: 'string' },
+          updatedAt: { type: 'string' },
+          deletedAt: { type: 'string' }
         }
+      }
+    },
+
+    delete: {
+      204: {
+        description: 'Delete a summoner profile.',
+        properties: {}
       }
     }
   }

@@ -1,6 +1,7 @@
 import { Database } from '@athenna/database'
 import { Summoner } from '#src/models/summoner'
 import { BaseHttpTest } from '@athenna/core/testing/BaseHttpTest'
+import { REGION, NICKNAME } from '#tests/fixtures/constants/summoner'
 import { Test, type Context, BeforeEach, AfterEach } from '@athenna/test'
 
 export default class SummonerControllerTest extends BaseHttpTest {
@@ -17,7 +18,7 @@ export default class SummonerControllerTest extends BaseHttpTest {
 
   @Test()
   public async shouldBeAbleToGetAllSummonersByRegionFromApi({ request }: Context) {
-    const response = await request.get('/api/v1/summoners/br1')
+    const response = await request.get(`/api/v1/summoners/${REGION}`)
 
     response.assertStatusCode(200)
     response.assertBodyIsArray()
@@ -25,20 +26,20 @@ export default class SummonerControllerTest extends BaseHttpTest {
 
   @Test()
   public async shouldBeAbleToGetASummonerByRegionAndItNicknameFromApi({ request }: Context) {
-    await Summoner.factory().create({ nickname: 'iLenon7' })
+    await Summoner.factory().create({ nickname: NICKNAME })
 
-    const response = await request.get('/api/v1/summoners/br1/iLenon7')
+    const response = await request.get(`/api/v1/summoners/${REGION}/${NICKNAME}`)
 
     response.assertStatusCode(200)
     response.assertBodyContains({
-      region: 'br1',
-      nickname: 'iLenon7'
+      region: REGION,
+      nickname: NICKNAME
     })
   }
 
   @Test()
   public async shouldThrowNotFoundExceptionWhenSummonerDoesNotExist({ request }: Context) {
-    const response = await request.get('/api/v1/summoners/br1/iLenon7')
+    const response = await request.get(`/api/v1/summoners/${REGION}/${NICKNAME}`)
 
     response.assertStatusCode(404)
     response.assertBodyContains({
@@ -53,26 +54,26 @@ export default class SummonerControllerTest extends BaseHttpTest {
   public async shouldBeAbleToCreateSummoner({ request }: Context) {
     const response = await request.post('/api/v1/summoners', {
       body: {
-        region: 'br1',
-        nickname: 'iLenon7'
+        region: REGION,
+        nickname: NICKNAME
       }
     })
 
     response.assertStatusCode(201)
     response.assertBodyContains({
-      region: 'br1',
-      nickname: 'iLenon7'
+      region: REGION,
+      nickname: NICKNAME
     })
   }
 
   @Test()
   public async shouldThrowDuplicatedSummonerException({ request }: Context) {
-    await Summoner.factory().count(1).create({ region: 'br1', nickname: 'iLenon7' })
+    await Summoner.factory().count(1).create({ region: REGION, nickname: NICKNAME })
 
     const response = await request.post('/api/v1/summoners', {
       body: {
-        region: 'br1',
-        nickname: 'iLenon7'
+        region: REGION,
+        nickname: NICKNAME
       }
     })
 
@@ -88,14 +89,58 @@ export default class SummonerControllerTest extends BaseHttpTest {
 
   @Test()
   public async shouldBeAbleToUpdateSummoner({ request }: Context) {
-    await Summoner.factory().count(1).create({ region: 'br1', nickname: 'iLenon7' })
+    await Summoner.factory().count(1).create({ region: REGION, nickname: NICKNAME })
 
-    const response = await request.put('/api/v1/summoners/br1/iLenon7')
+    const response = await request.put('/api/v1/summoners', {
+      body: {
+        region: REGION,
+        nickname: NICKNAME
+      }
+    })
 
     response.assertStatusCode(200)
     response.assertBodyContains({
-      region: 'br1',
-      nickname: 'iLenon7'
+      region: REGION,
+      nickname: NICKNAME
+    })
+  }
+
+  @Test()
+  public async shouldThrowNotFoundExceptionWhenTryingToUpdateASummonerThatDoesNotExist({ request }: Context) {
+    const response = await request.put('/api/v1/summoners', {
+      body: {
+        region: REGION,
+        nickname: NICKNAME
+      }
+    })
+    response.assertStatusCode(404)
+    response.assertBodyContains({
+      name: 'NotFoundDataException',
+      code: 'E_NOT_FOUND_DATA_ERROR',
+      message: 'Data not found in database.',
+      help: 'Data not found in database using the using postgres connection.'
+    })
+  }
+
+  @Test()
+  public async shouldBeAbleToDeleteSummoner({ request }: Context) {
+    await Summoner.factory().count(1).create({ region: REGION, nickname: NICKNAME })
+
+    const response = await request.delete(`/api/v1/summoners/${REGION}/${NICKNAME}`)
+
+    response.assertStatusCode(204)
+  }
+
+  @Test()
+  public async shouldThrowNotFoundExceptionWhenTryingToDeleteASummonerThatDoesNotExist({ request }: Context) {
+    const response = await request.delete(`/api/v1/summoners/${REGION}/${NICKNAME}`)
+
+    response.assertStatusCode(404)
+    response.assertBodyContains({
+      name: 'NotFoundDataException',
+      code: 'E_NOT_FOUND_DATA_ERROR',
+      message: 'Data not found in database.',
+      help: 'Data not found in database using the using postgres connection.'
     })
   }
 }
