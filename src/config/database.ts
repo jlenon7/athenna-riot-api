@@ -13,7 +13,7 @@ export default {
       connection: {
         host: Env('DB_HOST', 'localhost'),
         port: Env('DB_PORT', 5432),
-        user: Env('DB_USER', 'root'),
+        user: Env('DB_USERNAME', 'root'),
         password: Env('DB_PASSWORD', 'root'),
         database: Env('DB_DATABASE', 'athenna')
       },
