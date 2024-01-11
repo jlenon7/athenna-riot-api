@@ -122,6 +122,7 @@ build
 *.js.map
 !.github/ci.js
 !artisan.js
+!bin/pm2.js
 !tests/stubs/**/*.js
 !tests/stubs/**/*.d.ts
 !tests/stubs/**/*.js.map
