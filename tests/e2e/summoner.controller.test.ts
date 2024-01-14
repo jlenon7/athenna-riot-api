@@ -1,5 +1,5 @@
 import { Database } from '@athenna/database'
-import { Summoner } from '#src/models/summoner'
+import { Summoner } from '#src/database/models/summoner'
 import { BaseHttpTest } from '@athenna/core/testing/BaseHttpTest'
 import { REGION, NICKNAME } from '#tests/fixtures/constants/summoner'
 import { Test, type Context, BeforeEach, AfterEach } from '@athenna/test'

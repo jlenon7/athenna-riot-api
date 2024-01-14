@@ -1,6 +1,6 @@
 import { Service } from '@athenna/ioc'
-import { Summoner } from '#src/models/summoner'
-import type { RiotApiServiceInterface } from '#src/interfaces/riotapi.service.interface'
+import { Summoner } from '#src/database/models/summoner'
+import type { RiotApiServiceInterface } from '#src/providers/interfaces/riotapi.service.interface'
 
 @Service()
 export class SummonerService {

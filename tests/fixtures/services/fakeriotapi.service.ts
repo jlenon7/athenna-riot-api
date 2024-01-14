@@ -1,6 +1,6 @@
-import { Summoner } from '#src/models/summoner'
 import { SummonerDto } from '#src/dtos/summoner.dto'
-import type { RiotApiServiceInterface } from '#src/interfaces/riotapi.service.interface'
+import { Summoner } from '#src/database/models/summoner'
+import type { RiotApiServiceInterface } from '#src/providers/interfaces/riotapi.service.interface'
 
 export class FakeRiotApiService implements RiotApiServiceInterface {
   public async getSummonerByName(): Promise<SummonerDto> {

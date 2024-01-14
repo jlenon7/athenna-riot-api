@@ -1,5 +1,5 @@
 import { Middleware } from '@athenna/http'
-import { Summoner } from '#src/models/summoner'
+import { Summoner } from '#src/database/models/summoner'
 import type { Context, MiddlewareContract } from '@athenna/http'
 import { DuplicatedSummonerException } from '#src/exceptions/duplicatedsummoner.exception'
 

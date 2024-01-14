@@ -3,7 +3,7 @@ import { Config } from '@athenna/config'
 import type { SummonerDto } from '#src/dtos/summoner.dto'
 import { HttpClient, HttpClientBuilder } from '@athenna/common'
 import { ApiKeyExpiredException } from '#src/exceptions/apikeyexpired.exception'
-import type { RiotApiServiceInterface } from '#src/interfaces/riotapi.service.interface'
+import type { RiotApiServiceInterface } from '#src/providers/interfaces/riotapi.service.interface'
 
 @Service()
 export class RiotApiService implements RiotApiServiceInterface {

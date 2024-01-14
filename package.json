@@ -134,8 +134,8 @@
   },
   "athenna": {
     "services": [
-      "#src/services/summoner.service",
-      "#src/services/riotapi.service"
+      "#src/providers/services/summoner.service",
+      "#src/providers/services/riotapi.service"
     ],
     "providers": [
       "@athenna/core/providers/CoreProvider",
@@ -144,7 +144,7 @@
       "@athenna/database/providers/DatabaseProvider"
     ],
     "controllers": [
-      "#src/controllers/summoner.controller"
+      "#src/http/controllers/summoner.controller"
     ],
     "commands": {
       "configure": "@athenna/artisan/commands/ConfigureCommand",
@@ -169,7 +169,6 @@
         "outDir": "build",
         "tsconfig": "node_modules/@athenna/tsconfig/tsconfig.app-build.json",
         "include": [
-          "bin/pm2.js",
           "package.json",
           "package-lock.json"
         ]
@@ -220,29 +219,30 @@
       "bootstrap": "bin",
       "config": "src/config",
       "routes": "src/routes",
-      "models": "src/models",
       "exceptions": "src/exceptions",
       "providers": "src/providers",
       "facades": "src/providers/facades",
-      "services": "src/services",
-      "commands": "src/commands",
-      "controllers": "src/controllers",
-      "middlewares": "src/middlewares",
-      "interceptors": "src/interceptors",
-      "terminators": "src/terminators",
-      "repositories": "src/repositories",
+      "services": "src/providers/services",
+      "console": "src/console",
+      "commands": "src/console/commands",
+      "controllers": "src/http/controllers",
+      "middlewares": "src/http/middlewares",
+      "interceptors": "src/http/interceptors",
+      "terminators": "src/http/terminators",
       "resources": "src/resources",
       "views": "src/resources/views",
       "locales": "src/resources/locales",
       "database": "src/database",
+      "models": "src/database/models",
       "seeders": "src/database/seeders",
-      "migrations": "src/database/migrations"
+      "migrations": "src/database/migrations",
+      "repositories": "src/database/repositories"
     },
     "models": [
-      "#src/models/summoner"
+      "#src/database/models/summoner"
     ],
     "middlewares": [
-      "#src/middlewares/summoner.validator"
+      "#src/http/middlewares/summoner.validator"
     ]
   }
 }

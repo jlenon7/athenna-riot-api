@@ -2,7 +2,7 @@ import { Column, BaseModel } from '@athenna/database'
 
 export class Summoner extends BaseModel {
   @Column()
-  public id: number
+  public id: string
 
   @Column({ isNullable: false })
   public nickname: string
@@ -30,7 +30,7 @@ export class Summoner extends BaseModel {
 
   public static async definition() {
     return {
-      id: this.faker.number.int({ max: 100000 }),
+      id: this.faker.string.uuid(),
       nickname: this.faker.person.firstName(),
       summonerId: this.faker.string.uuid(),
       accountId: this.faker.string.uuid(),

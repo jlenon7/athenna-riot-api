@@ -5,7 +5,7 @@ export default {
         description: 'Return multiple summoners profiles.',
         type: 'array',
         properties: {
-          id: { type: 'integer' },
+          id: { type: 'string' },
           region: { type: 'string' },
           nickname: { type: 'string' },
           summonerId: { type: 'string' },
@@ -17,12 +17,11 @@ export default {
         }
       }
     },
-
     show: {
       200: {
         description: 'Return one summoner profile.',
         properties: {
-          id: { type: 'integer' },
+          id: { type: 'string' },
           region: { type: 'string' },
           nickname: { type: 'string' },
           summonerId: { type: 'string' },
@@ -34,12 +33,11 @@ export default {
         }
       }
     },
-
     store: {
       201: {
         description: 'Return the created summoner profile.',
         properties: {
-          id: { type: 'integer' },
+          id: { type: 'string' },
           region: { type: 'string' },
           nickname: { type: 'string' },
           summonerId: { type: 'string' },
@@ -51,12 +49,11 @@ export default {
         }
       }
     },
-
     update: {
       200: {
         description: 'Return the updated summoner profile.',
         properties: {
-          id: { type: 'integer' },
+          id: { type: 'string' },
           region: { type: 'string' },
           nickname: { type: 'string' },
           summonerId: { type: 'string' },
@@ -68,7 +65,6 @@ export default {
         }
       }
     },
-
     delete: {
       204: {
         description: 'Delete a summoner profile.',

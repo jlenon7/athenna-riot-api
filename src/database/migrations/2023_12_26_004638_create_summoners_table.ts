@@ -1,11 +1,11 @@
 import { BaseMigration, type DatabaseImpl } from '@athenna/database'
 
-export class Summoners extends BaseMigration {
+export class SummonerMigration extends BaseMigration {
   public tableName = 'summoners'
 
   public async up(db: DatabaseImpl) {
     return db.createTable(this.tableName, builder => {
-      builder.increments('id')
+      builder.uuid('id').primary().defaultTo(db.raw('uuid_generate_v4()'))
       builder.string('nickname')
       builder.string('region')
       builder.string('puuid').unique()

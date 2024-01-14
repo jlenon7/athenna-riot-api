@@ -7,7 +7,6 @@ export default {
       driver: 'fake',
       validations: false
     },
-
     postgres: {
       driver: 'postgres',
       connection: {

@@ -1,7 +1,7 @@
-import { Summoner } from '#src/models/summoner'
+import { Summoner } from '#src/database/models/summoner'
 import { Database, DatabaseProvider } from '@athenna/database'
-import { SummonerService } from '#src/services/summoner.service'
 import { REGION, NICKNAME } from '#tests/fixtures/constants/summoner'
+import { SummonerService } from '#src/providers/services/summoner.service'
 import { Test, type Context, BeforeEach, AfterEach, Mock } from '@athenna/test'
 import { FakeRiotApiService } from '#tests/fixtures/services/fakeriotapi.service'
 

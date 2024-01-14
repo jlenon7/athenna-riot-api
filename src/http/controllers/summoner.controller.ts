@@ -1,6 +1,6 @@
 import { Inject } from '@athenna/ioc'
 import { Controller, type Context } from '@athenna/http'
-import { SummonerService } from '#src/services/summoner.service'
+import { SummonerService } from '#src/providers/services/summoner.service'
 
 @Controller()
 export class SummonerController {

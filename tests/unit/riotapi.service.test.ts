@@ -1,5 +1,5 @@
 import { HttpClient } from '@athenna/common'
-import { RiotApiService } from '#src/services/riotapi.service'
+import { RiotApiService } from '#src/providers/services/riotapi.service'
 import { Test, type Context, AfterEach, Mock, BeforeEach } from '@athenna/test'
 import { ApiKeyExpiredException } from '#src/exceptions/apikeyexpired.exception'
 import { REGION, NICKNAME, SUMMONER_ID } from '#tests/fixtures/constants/summoner'
