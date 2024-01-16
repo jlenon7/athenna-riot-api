@@ -1,0 +1,9 @@
+import { Column, BaseModel } from '@athenna/database'
+
+export class {{ namePascal }} extends BaseModel {
+@each((property, i) in properties)
+  {{ property.annotation }}
+  public {{ property.name }}: {{ property.type }}{{ i + 1 === properties.length ? '' : '\n' }}
+@end
+}
+

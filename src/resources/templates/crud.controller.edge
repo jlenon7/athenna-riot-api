@@ -1,0 +1,46 @@
+import { Inject } from '@athenna/ioc'
+import { Controller, type Context } from '@athenna/http'
+import { {{ namePascal }}Service } from '#src/providers/services/{{ nameCamel }}.service'
+
+@Controller()
+export class {{ namePascal }}Controller {
+  @Inject()
+  private readonly {{ nameCamel }}Service: {{ namePascal }}Service
+
+  public async index({ request, response }: Context) {
+    const data = await this.{{ nameCamel }}Service.paginate(
+      request.query('page'),
+      request.query('limit')
+    )
+
+    return response.status(200).send(data)
+  }
+
+  public async show({ request, response }: Context) {
+    const data = await this.{{ nameCamel }}Service.findById(request.param('id'))
+
+    return response.status(200).send(data)
+  }
+
+  public async store({ request, response }: Context) {
+    const data = await this.{{ nameCamel }}Service.create(request.body)
+
+    return response.status(201).send(data)
+  }
+
+  public async update({ request, response }: Context) {
+    const data = await this.{{ nameCamel }}Service.update(
+      request.param('id'),
+      request.body
+    )
+
+    return response.status(200).send(data)
+  }
+
+  public async delete({ request, response }: Context) {
+    await this.{{ nameCamel }}Service.delete(request.param('id'))
+
+    return response.status(204)
+  }
+}
+

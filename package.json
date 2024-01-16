@@ -26,12 +26,12 @@
     "#tests": "./tests/index.js"
   },
   "dependencies": {
-    "@athenna/artisan": "^4.28.0",
-    "@athenna/common": "^4.28.0",
+    "@athenna/artisan": "^4.30.0",
+    "@athenna/common": "^4.29.0",
     "@athenna/config": "^4.13.0",
-    "@athenna/core": "^4.23.0",
-    "@athenna/database": "^4.30.0",
-    "@athenna/http": "^4.17.0",
+    "@athenna/core": "^4.24.0",
+    "@athenna/database": "^4.33.0",
+    "@athenna/http": "^4.18.0",
     "@athenna/ioc": "^4.13.0",
     "@athenna/logger": "^4.14.0",
     "@athenna/view": "^4.11.0",
@@ -42,7 +42,6 @@
     "@fastify/swagger-ui": "^1.10.2",
     "knex": "^3.1.0",
     "pg": "^8.11.3",
-    "pm2": "^5.3.0",
     "reflect-metadata": "^0.2.1",
     "source-map-support": "^0.5.21"
   },
@@ -195,9 +194,13 @@
       "migration:revert": {
         "path": "@athenna/database/commands/MigrationRevertCommand",
         "loadApp": true
-      }
+      },
+      "make:crud": "#src/console/commands/makecrud.command"
     },
     "templates": {
+      "crud:model": "./src/resources/templates/crud.model.edge",
+      "crud:controller": "./src/resources/templates/crud.controller.edge",
+      "crud:service": "./src/resources/templates/crud.service.edge",
       "exception": "node_modules/@athenna/core/templates/exception.edge",
       "facade": "node_modules/@athenna/core/templates/facade.edge",
       "provider": "node_modules/@athenna/core/templates/provider.edge",

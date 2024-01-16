@@ -1,0 +1,26 @@
+import { Service } from '@athenna/ioc'
+import { {{ namePascal }} } from '#src/database/models/{{ nameCamel }}'
+
+@Service()
+export class {{ namePascal }}Service {
+  public async paginate(page: number, limit: number) {
+    return {{ namePascal }}.query().paginate(page, limit)
+  }
+
+  public async findById(id: string) {
+    return {{ namePascal }}.query().where('id', id).find()
+  }
+
+  public async create(data: Partial<{{ namePascal }}>) {
+    return {{ namePascal }}.create(data)
+  }
+
+  public async update(id: string, data: Partial<{{ namePascal }}>) {
+    return {{ namePascal }}.query().where('id', id).update(data)
+  }
+
+  public async delete(id: string, force = false) {
+    return {{ namePascal }}.query().where('id', id).delete(force)
+  }
+}
+
