@@ -201,6 +201,7 @@
       "crud:model": "./src/resources/templates/crud.model.edge",
       "crud:controller": "./src/resources/templates/crud.controller.edge",
       "crud:service": "./src/resources/templates/crud.service.edge",
+      "crud:migration": "./src/resources/templates/crud.migration.edge",
       "exception": "node_modules/@athenna/core/templates/exception.edge",
       "facade": "node_modules/@athenna/core/templates/facade.edge",
       "provider": "node_modules/@athenna/core/templates/provider.edge",

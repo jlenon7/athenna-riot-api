@@ -1,9 +1,21 @@
 import { Column, BaseModel } from '@athenna/database'
 
 export class {{ namePascal }} extends BaseModel {
+  @Column()
+  public id: string
+
 @each((property, i) in properties)
-  {{ property.annotation }}
-  public {{ property.name }}: {{ property.type }}{{ i + 1 === properties.length ? '' : '\n' }}
+  {{{ property.annotation }}}
+  public {{ property.name }}: {{ property.type }}
+
 @end
+  @Column({ isCreateDate: true })
+  public createdAt: Date
+
+  @Column({ isUpdateDate: true })
+  public updatedAt: Date
+
+  @Column({ isDeleteDate: true })
+  public deletedAt: Date
 }
 

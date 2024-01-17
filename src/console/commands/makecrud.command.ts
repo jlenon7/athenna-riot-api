@@ -82,28 +82,14 @@ export class MakeCrudCommand extends BaseCommand {
       )
     }
 
-    properties.unshift({ name: 'id', type: 'string' })
-    properties.push({ name: 'createdAt', type: 'Date', isCreateDate: true })
-    properties.push({ name: 'updatedAt', type: 'Date', isUpdateDate: true })
-    properties.push({ name: 'deletedAt', type: 'Date', isDeleteDate: true })
-
     console.log()
     await this.makeController()
     console.log()
     await this.makeService()
     console.log()
     await this.makeModel(properties)
-
-    // TODO Make migration
-    // console.log()
-    // await this.makeMigration()
-  }
-
-  private getImportPath(dest: string, name: string): string {
-    return `${dest
-      .replace(Path.pwd(), '')
-      .replace(/\\/g, '/')
-      .replace('/', '#')}/${name}`
+    console.log()
+    await this.makeMigration(properties)
   }
 
   private async makeController() {
@@ -111,6 +97,7 @@ export class MakeCrudCommand extends BaseCommand {
 
     const file = await this.generator
       .fileName(this.name)
+      .destination(Path.controllers())
       .path(Path.controllers(`${String.toDotCase(this.name)}.controller.ts`))
       .template('crud:controller')
       .make()
@@ -119,7 +106,7 @@ export class MakeCrudCommand extends BaseCommand {
       `Controller ({yellow} "${file.name}") successfully created.`
     )
 
-    const importPath = this.getImportPath(Path.controllers(), file.name)
+    const importPath = this.generator.getImportPath()
 
     await this.rc.pushTo('controllers', importPath).save()
 
@@ -133,6 +120,7 @@ export class MakeCrudCommand extends BaseCommand {
 
     const file = await this.generator
       .fileName(this.name)
+      .destination(Path.services())
       .path(Path.services(`${String.toDotCase(this.name)}.service.ts`))
       .template('crud:service')
       .make()
@@ -141,7 +129,7 @@ export class MakeCrudCommand extends BaseCommand {
       `Service ({yellow} "${file.name}") successfully created.`
     )
 
-    const importPath = this.getImportPath(Path.services(), file.name)
+    const importPath = this.generator.getImportPath()
 
     await this.rc.pushTo('services', importPath).save()
 
@@ -161,13 +149,13 @@ export class MakeCrudCommand extends BaseCommand {
       const keys = Object.keys(opts)
 
       keys.forEach((key, i) => {
-        if (i + 1 === keys.length) {
+        if (i === 0) {
           options += `${key}: ${opts[key]}`
 
           return
         }
 
-        options += `${key}: ${opts[key]}, `
+        options += `, ${key}: ${opts[key]}`
       })
 
       properties.push({
@@ -179,6 +167,7 @@ export class MakeCrudCommand extends BaseCommand {
 
     const file = await this.generator
       .fileName(this.name)
+      .destination(Path.models())
       .path(Path.models(`${String.toDotCase(this.name)}.ts`))
       .template('crud:model')
       .properties({ properties })
@@ -186,12 +175,91 @@ export class MakeCrudCommand extends BaseCommand {
 
     this.logger.success(`Model ({yellow} "${file.name}") successfully created.`)
 
-    const importPath = this.getImportPath(Path.services(), file.name)
+    const importPath = this.generator.getImportPath()
 
     await this.rc.pushTo('models', importPath).save()
 
     this.logger.success(
       `Athenna RC updated: ({dim,yellow} [ models += "${importPath}" ])`
+    )
+  }
+
+  private async makeMigration(columns: any[]) {
+    this.cleanGenerator()
+
+    const tuples = []
+    const typeMap = {
+      string: 'string',
+      boolean: 'boolean',
+      number: 'integer',
+      bigint: 'bigint',
+      Date: 'dateTime'
+    }
+
+    columns.forEach(column => {
+      let tuple = `builder.${typeMap[column.type]}('${column.name}')`
+      const opts = Json.omit(column, ['name', 'type'])
+
+      Object.keys(opts).forEach(key => {
+        if (key === 'isPrimary') {
+          tuple += '.primary()'
+        }
+
+        if (key === 'isUnique') {
+          tuple += '.unique()'
+        }
+
+        if (key === 'isNullable') {
+          tuple += '.nullable()'
+        }
+
+        if (key === 'defaultTo') {
+          tuple += `.defaultTo(${opts[key]})`
+        }
+
+        return undefined
+      })
+
+      tuples.push(tuple)
+    })
+
+    const nameUp = this.name.toUpperCase()
+    const nameCamel = String.toCamelCase(this.name)
+    const namePlural = String.pluralize(this.name)
+    const namePascal = String.toPascalCase(this.name)
+    const namePluralCamel = String.toCamelCase(String.pluralize(this.name))
+    const namePluralPascal = String.toPascalCase(String.pluralize(this.name))
+
+    const tableName = String.pluralize(
+      namePascal
+        .replace('Migration', '')
+        .replace('Migrations', '')
+        .toLowerCase()
+    )
+
+    let [date, time] = new Date().toISOString().split('T')
+
+    date = date.replace(/-/g, '_')
+    time = time.split('.')[0].replace(/:/g, '')
+
+    const file = await this.generator
+      .fileName(`${date}_${time}_create_${tableName}_table`)
+      .destination(Path.migrations())
+      .properties({
+        nameUp,
+        nameCamel,
+        namePlural,
+        namePascal,
+        namePluralCamel,
+        namePluralPascal,
+        tableName,
+        tuples: tuples.join('\n')
+      })
+      .template('crud:migration')
+      .make()
+
+    this.logger.success(
+      `Migration ({yellow} "${file.name}") successfully created.`
     )
   }
 
