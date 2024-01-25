@@ -7,10 +7,13 @@ export class SummonerController {
   @Inject()
   private readonly summonerService: SummonerService
 
-  public async index({ request, response }: Context) {
-    const data = await this.summonerService.findAll(request.param('region'))
+  public async index({ data, request, response }: Context) {
+    const paginated = await this.summonerService.paginate(
+      request.param('region'),
+      data.pagination
+    )
 
-    return response.status(200).send(data)
+    return response.status(200).send(paginated)
   }
 
   public async show({ request, response }: Context) {

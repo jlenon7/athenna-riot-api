@@ -1,4 +1,13 @@
 {
   "extends": "@athenna/tsconfig/tsconfig.app-slim.json",
-  "compilerOptions": {}
+  "compilerOptions": {
+    "paths": {
+      "#bin/*": ["bin/*"],
+      "#bin": ["bin/index.ts"],
+      "#src/*": ["src/*"],
+      "#src": ["src/index.ts"],
+      "#tests/*": ["tests/*"],
+      "#tests": ["tests/index.ts"]
+    }
+  }
 }

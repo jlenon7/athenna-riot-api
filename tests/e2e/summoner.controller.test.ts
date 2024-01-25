@@ -17,11 +17,26 @@ export default class SummonerControllerTest extends BaseHttpTest {
   }
 
   @Test()
-  public async shouldBeAbleToGetAllSummonersByRegionFromApi({ request }: Context) {
+  public async shouldBeAbleToGetPaginatedSummonersByRegion({ request }: Context) {
     const response = await request.get(`/api/v1/summoners/${REGION}`)
 
     response.assertStatusCode(200)
-    response.assertBodyIsArray()
+    response.assertBodyContains({
+      meta: {
+        itemCount: 10,
+        totalItems: 10,
+        totalPages: 1,
+        currentPage: 0,
+        itemsPerPage: 10
+      },
+      links: {
+        first: '/api/v1/summoners/br1?limit=10',
+        previous: '/api/v1/summoners/br1?page=0&limit=10',
+        next: '/api/v1/summoners/br1?page=1&limit=10',
+        last: '/api/v1/summoners/br1?page=1&limit=10'
+      }
+    })
+    response.assertBodyContainsAllKeys(['meta', 'links', 'data'])
   }
 
   @Test()

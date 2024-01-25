@@ -1,4 +1,5 @@
-import { Column, BaseModel } from '@athenna/database'
+import { Rank } from '#src/database/models/rank'
+import { Column, BaseModel, HasMany } from '@athenna/database'
 
 export class Summoner extends BaseModel {
   @Column()
@@ -27,6 +28,9 @@ export class Summoner extends BaseModel {
 
   @Column({ isDeleteDate: true })
   public deletedAt: Date
+
+  @HasMany(() => Rank)
+  public ranks: Rank[]
 
   public static async definition() {
     return {

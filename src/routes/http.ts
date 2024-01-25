@@ -1,9 +1,14 @@
 import { Route } from '@athenna/http'
 
+Route.get('/', ctx => ctx.response.redirectTo('/docs')).hide()
+
 Route.group(() => {
   Route.get('/summoners/:region', 'SummonerController.index')
+    .queryString('page', { type: 'number' })
+    .queryString('limit', { type: 'number' })
     .response(200, Config.get('swagger.summoners.index.200'))
     .tags(['Summoner'])
+    .middleware('pagination')
 
   Route.get('/summoners/:region/:nickname', 'SummonerController.show')
     .response(200, Config.get('swagger.summoners.show.200'))

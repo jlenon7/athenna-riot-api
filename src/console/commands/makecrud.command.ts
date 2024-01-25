@@ -106,7 +106,9 @@ export class MakeCrudCommand extends BaseCommand {
       `Controller ({yellow} "${file.name}") successfully created.`
     )
 
-    const importPath = this.generator.getImportPath()
+    const importPath = this.generator
+      .fileName(`${this.name}.controller`)
+      .getImportPath()
 
     await this.rc.pushTo('controllers', importPath).save()
 
@@ -129,7 +131,9 @@ export class MakeCrudCommand extends BaseCommand {
       `Service ({yellow} "${file.name}") successfully created.`
     )
 
-    const importPath = this.generator.getImportPath()
+    const importPath = this.generator
+      .fileName(`${this.name}.service`)
+      .getImportPath()
 
     await this.rc.pushTo('services', importPath).save()
 

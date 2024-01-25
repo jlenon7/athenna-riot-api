@@ -1,17 +1,26 @@
-import { Service } from '@athenna/ioc'
+import { Inject, Service } from '@athenna/ioc'
 import { Summoner } from '#src/database/models/summoner'
+import { Options, type PaginationOptions } from '@athenna/common'
+import type { RankService } from '#src/providers/services/rank.service'
 import type { RiotApiServiceInterface } from '#src/providers/interfaces/riotapi.service.interface'
 
 @Service()
 export class SummonerService {
-  public constructor(private riotApiService: RiotApiServiceInterface) {}
+  @Inject()
+  private rankService: RankService
 
-  public async findAll(region: string) {
-    const summoners = await Summoner.query()
+  @Inject()
+  private riotApiService: RiotApiServiceInterface
+
+  public async paginate(region: string, options: PaginationOptions = {}) {
+    options = Options.create(options, {
+      page: 0,
+      limit: 10
+    })
+
+    return Summoner.query()
       .where('region', region)
-      .collection()
-
-    return summoners.toJSON()
+      .paginate(options.page, options.limit, options.resourceUrl)
   }
 
   public async findOne(region: string, nickname: string) {
@@ -32,6 +41,9 @@ export class SummonerService {
       nickname: data.name,
       accountId: data.accountId
     })
+
+    await this.rankService.create(summoner)
+    await summoner.load('ranks')
 
     return summoner.toJSON()
   }

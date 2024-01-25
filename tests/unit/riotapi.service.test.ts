@@ -69,4 +69,28 @@ export default class RiotApiServiceTest {
 
     await assert.rejects(() => riotApiService.getSummonerBySummonerId(REGION, NICKNAME), ApiKeyExpiredException)
   }
+
+  @Test()
+  public async shouldBeAbleToGetRankBySummonerId({ assert }: Context) {
+    const riotApiService = new RiotApiService()
+    const builder = HttpClient.builder()
+
+    Mock.when(builder, 'get').resolve({ body: { summonerId: SUMMONER_ID } })
+    Mock.when(riotApiService, 'request').return(builder)
+
+    const summoner = await riotApiService.getRanksBySummonerId(REGION, SUMMONER_ID)
+
+    assert.deepEqual(summoner, { summonerId: SUMMONER_ID })
+  }
+
+  @Test()
+  public async shouldThrowApiKeyExpiredExceptionInGetRankBySummonerId({ assert }: Context) {
+    const riotApiService = new RiotApiService()
+    const builder = HttpClient.builder()
+
+    Mock.when(builder, 'get').resolve({ statusCode: 403 })
+    Mock.when(riotApiService, 'request').return(builder)
+
+    await assert.rejects(() => riotApiService.getRanksBySummonerId(REGION, SUMMONER_ID), ApiKeyExpiredException)
+  }
 }

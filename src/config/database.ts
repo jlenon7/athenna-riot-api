@@ -9,6 +9,7 @@ export default {
     },
     postgres: {
       driver: 'postgres',
+      validations: !Env('DB_TESTING', false),
       connection: {
         host: Env('DB_HOST', 'localhost'),
         port: Env('DB_PORT', 5432),

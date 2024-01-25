@@ -1,15 +1,18 @@
+import { Rank } from '#src/database/models/rank'
 import { Summoner } from '#src/database/models/summoner'
 import { Database, DatabaseProvider } from '@athenna/database'
 import { REGION, NICKNAME } from '#tests/fixtures/constants/summoner'
 import { SummonerService } from '#src/providers/services/summoner.service'
 import { Test, type Context, BeforeEach, AfterEach, Mock } from '@athenna/test'
-import { FakeRiotApiService } from '#tests/fixtures/services/fakeriotapi.service'
 
 export default class SummonerServiceTest {
   @BeforeEach()
   public async beforeEach() {
     Config.set('database.default', 'fake')
     Config.set('database.connections.fake.driver', 'fake')
+
+    await ioc.loadModule('#tests/fixtures/services/fakerank.service')
+    await ioc.loadModule('#tests/fixtures/services/fakeriotapi.service')
 
     /**
      * Register database provider in case developer
@@ -26,34 +29,36 @@ export default class SummonerServiceTest {
   }
 
   @Test()
-  public async shouldBeAbleToListAllSummonersByRegion({ assert }: Context) {
+  public async shouldBeAbleToGetAllSummonersPaginatedByRegion({ assert }: Context) {
     const fakeSummoner = await Summoner.factory().count(1).make({
       region: REGION,
       nickname: NICKNAME
     })
 
-    Mock.when(Database.driver, 'findMany').resolve([fakeSummoner])
+    Mock.when(Database.driver, 'paginate').resolve({ meta: {}, links: {}, data: [fakeSummoner] })
 
-    const summonerService = new SummonerService(new FakeRiotApiService())
-    const summoners = await summonerService.findAll(REGION)
+    const summonerService = new SummonerService()
+    const { data } = await summonerService.paginate(REGION)
 
-    assert.containsSubset(summoners, [{ nickname: 'iLenon7', region: 'br1' }])
+    assert.containsSubset(data, [{ nickname: 'iLenon7', region: 'br1' }])
   }
 
   @Test()
-  public async shouldBeAbleCreateOneSummoner({ assert }: Context) {
+  public async shouldBeAbleToCreateOneSummoner({ assert }: Context) {
     const fakeSummoner = await Summoner.factory().count(1).make({
       region: REGION,
       nickname: NICKNAME
     })
+    const fakeRank = await Rank.factory().count(1).make({ summonerId: fakeSummoner.id })
 
-    Mock.when(Database.driver, 'find').resolve(undefined)
-    Mock.when(Database.driver, 'createMany').resolve([fakeSummoner])
+    Mock.when(Database.driver, 'createMany').onFirstCall().resolve([fakeSummoner]).onSecondCall().resolve([fakeRank])
+    Mock.when(Database.driver, 'findMany').resolve([fakeRank])
 
-    const summonerService = new SummonerService(new FakeRiotApiService())
+    const summonerService = new SummonerService()
     const summoner = await summonerService.createOne(REGION, NICKNAME)
 
     assert.containsSubset(summoner, { region: REGION, nickname: NICKNAME })
+    assert.containsSubset(summoner.ranks, [{ summonerId: fakeSummoner.id }])
   }
 
   @Test()
@@ -65,7 +70,7 @@ export default class SummonerServiceTest {
 
     Mock.when(Database.driver, 'find').resolve(fakeSummoner)
 
-    const summonerService = new SummonerService(new FakeRiotApiService())
+    const summonerService = new SummonerService()
     const summoner = await summonerService.findOne(REGION, NICKNAME)
 
     assert.containsSubset(summoner, { region: REGION, nickname: NICKNAME })
@@ -81,7 +86,7 @@ export default class SummonerServiceTest {
     Mock.when(Database.driver, 'find').resolve(fakeSummoner)
     Mock.when(Database.driver, 'update').resolve(fakeSummoner)
 
-    const summonerService = new SummonerService(new FakeRiotApiService())
+    const summonerService = new SummonerService()
     const summoner = await summonerService.updateOne(REGION, NICKNAME)
 
     assert.containsSubset(summoner, { region: REGION, nickname: NICKNAME })
@@ -97,7 +102,7 @@ export default class SummonerServiceTest {
     Mock.when(Database.driver, 'find').resolve(fakeSummoner)
     Mock.when(Database.driver, 'update').resolve(undefined)
 
-    const summonerService = new SummonerService(new FakeRiotApiService())
+    const summonerService = new SummonerService()
     await summonerService.deleteOne(REGION, NICKNAME)
 
     assert.calledWithMatch(Database.driver.update, { deletedAt: Mock.match.date })
